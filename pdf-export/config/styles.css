@@ -1,0 +1,290 @@
+/* PDF Export Styles for Observable Framework */
+
+/* Page setup */
+@page {
+  size: A4;
+  margin: 20mm 15mm;
+  
+  @top-center {
+    content: "Technical Report";
+    font-size: 12px;
+    color: #666;
+    font-family: var(--sans-serif);
+  }
+  
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 10px;
+    color: #666;
+    font-family: var(--sans-serif);
+  }
+}
+
+/* Remove Observable Framework UI elements */
+.observablehq-header,
+.observablehq-footer,
+.observablehq-sidebar,
+.observablehq-sidebar-toggle,
+.observablehq-toc,
+.observablehq-toc-toggle,
+.observablehq-search,
+.observablehq-theme-toggle,
+.observablehq-pager,
+#observablehq-sidebar-toggle,
+#observablehq-toc-toggle {
+  display: none !important;
+}
+
+/* Main content optimization */
+.observablehq-main,
+main {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* Typography for print */
+body {
+  font-family: Charter, Georgia, serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #000;
+  background: white !important;
+}
+
+/* Headings */
+h1 {
+  font-size: 24pt;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1a1a1a;
+  page-break-after: avoid;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 10px;
+}
+
+h2 {
+  font-size: 18pt;
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  page-break-after: avoid;
+  border-left: 4px solid #3498db;
+  padding-left: 15px;
+}
+
+h3 {
+  font-size: 14pt;
+  font-weight: 600;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: #34495e;
+  page-break-after: avoid;
+}
+
+/* Paragraphs and text */
+p {
+  margin-bottom: 12px;
+  text-align: justify;
+  orphans: 3;
+  widows: 3;
+}
+
+/* Links in print */
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a[href^="http"]:after {
+  content: " (" attr(href) ")";
+  font-size: 0.8em;
+  color: #666;
+}
+
+/* Code blocks */
+pre {
+  background-color: #f8f9fa !important;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 15px;
+  font-size: 9pt;
+  line-height: 1.4;
+  page-break-inside: avoid;
+  overflow-x: auto;
+}
+
+code {
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 0.9em;
+  background-color: #f3f4f6;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  page-break-inside: avoid;
+  font-size: 10pt;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Images and figures */
+img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 20px auto;
+  page-break-inside: avoid;
+}
+
+figure {
+  margin: 20px 0;
+  page-break-inside: avoid;
+}
+
+figcaption {
+  text-align: center;
+  font-size: 9pt;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* D3 and Observable Plot optimizations */
+svg {
+  max-width: 100% !important;
+  height: auto !important;
+  page-break-inside: avoid;
+  margin: 20px 0;
+}
+
+/* Ensure SVG text is visible */
+svg text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
+  fill: #000 !important;
+}
+
+/* Observable Plot specific */
+.observablehq figure[data-type="plot"] {
+  page-break-inside: avoid;
+  margin: 30px 0;
+}
+
+/* Lists */
+ul, ol {
+  margin-bottom: 15px;
+  padding-left: 30px;
+}
+
+li {
+  margin-bottom: 5px;
+  line-height: 1.6;
+}
+
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 20px;
+  margin: 20px 0;
+  font-style: italic;
+  color: #4b5563;
+}
+
+/* Footnotes (if using markdown-it-footnote) */
+.footnotes {
+  font-size: 9pt;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 40px;
+  padding-top: 20px;
+}
+
+.footnote-ref {
+  font-size: 0.8em;
+  vertical-align: super;
+}
+
+/* Page breaks */
+.page-break {
+  page-break-before: always;
+}
+
+.no-break {
+  page-break-inside: avoid;
+}
+
+/* Ensure color accuracy */
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+
+/* Hide interactive elements */
+button,
+input,
+select,
+textarea,
+.interactive,
+.observablehq-loading {
+  display: none !important;
+}
+
+/* Grid and card layouts for print */
+.grid {
+  display: block !important;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  padding: 15px;
+  margin-bottom: 20px;
+  page-break-inside: avoid;
+  background: #f9fafb;
+}
+
+/* Hero section optimization */
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+  page-break-after: avoid;
+}
+
+.hero h1 {
+  border: none;
+  font-size: 32pt;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  border: none;
+  font-size: 14pt;
+  font-weight: normal;
+  color: #6b7280;
+  padding: 0;
+}
+
+/* Remove animations and transitions */
+* {
+  animation: none !important;
+  transition: none !important;
+}
