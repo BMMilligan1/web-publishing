@@ -67,9 +67,18 @@ const reports = await FileAttachment("/data/all-reports.json").json();
 const tags = [...new Set(reports.flatMap(r => r.tags || []))];
 
 // Pre-load illustration URLs
+const illustrations = {
+  'climate-finance.svg': await FileAttachment('../climate-finance.svg').url(),
+  'ocean-waves.svg': await FileAttachment('../ocean-waves.svg').url(),
+  'pacific-summit.svg': await FileAttachment('../pacific-summit.svg').url(),
+  'coral-reef.svg': await FileAttachment('../coral-reef.svg').url(),
+  'data-flow.svg': await FileAttachment('../data-flow.svg').url()
+};
+
+// Add illustration URLs to reports
 for (const report of reports) {
-  if (report.illustration) {
-    report.illustrationUrl = await FileAttachment(`../${report.illustration}`).url();
+  if (report.illustration && illustrations[report.illustration]) {
+    report.illustrationUrl = illustrations[report.illustration];
   }
 }
 

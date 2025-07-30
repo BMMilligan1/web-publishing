@@ -112,9 +112,16 @@ title: Interactive Dashboards
 const dashboards = await FileAttachment("/data/dashboards-list.json").json();
 
 // Pre-load illustration URLs
+const illustrations = {
+  'ocean-waves.svg': await FileAttachment('../ocean-waves.svg').url(),
+  'data-flow.svg': await FileAttachment('../data-flow.svg').url(),
+  'climate-finance.svg': await FileAttachment('../climate-finance.svg').url()
+};
+
+// Add illustration URLs to dashboards
 for (const dashboard of dashboards) {
-  if (dashboard.illustration) {
-    dashboard.illustrationUrl = await FileAttachment(`../${dashboard.illustration}`).url();
+  if (dashboard.illustration && illustrations[dashboard.illustration]) {
+    dashboard.illustrationUrl = illustrations[dashboard.illustration];
   }
 }
 

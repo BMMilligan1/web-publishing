@@ -9,7 +9,7 @@
     "update_frequency": "Daily",
     "data_sources": ["NOAA", "IOC-UNESCO"],
     "slug": "ocean-health-tracker",
-    "url": "/dashboards/ocean-health-tracker/",
+    "url": "/dashboards/ocean-health-tracker",
     "dateFormatted": "January 28, 2024"
   },
   {
@@ -22,7 +22,7 @@
     "update_frequency": "Monthly",
     "data_sources": ["OECD", "World Bank", "Climate Funds Update"],
     "slug": "climate-finance-visualizer",
-    "url": "/dashboards/climate-finance-visualizer/",
+    "url": "/dashboards/climate-finance-visualizer",
     "dateFormatted": "January 25, 2024"
   }
 ]

@@ -9,7 +9,7 @@
     "featured": true,
     "read_time": "5 min read",
     "slug": "2024-01-25-pacific-climate-summit",
-    "url": "/news/2024-01-25-pacific-climate-summit/",
+    "url": "/news/2024-01-25-pacific-climate-summit",
     "dateFormatted": "January 25, 2024"
   },
   {
@@ -21,7 +21,7 @@
     "tags": ["finance", "report", "adaptation"],
     "read_time": "3 min read",
     "slug": "climate-finance-report-2023",
-    "url": "/news/climate-finance-report-2023/",
+    "url": "/news/climate-finance-report-2023",
     "dateFormatted": "January 20, 2024"
   },
   {
@@ -33,7 +33,7 @@
     "tags": ["data", "ocean", "visualization"],
     "read_time": "4 min read",
     "slug": "ocean-dashboard-launch",
-    "url": "/news/ocean-dashboard-launch/",
+    "url": "/news/ocean-dashboard-launch",
     "dateFormatted": "January 15, 2024"
   }
 ]

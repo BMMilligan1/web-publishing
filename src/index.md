@@ -126,22 +126,34 @@ const latestReports = reports.slice(0, 3);
 const latestDashboards = dashboards.slice(0, 2);
 const latestArticles = articles.slice(0, 3);
 
-// Pre-load illustration URLs
+// Pre-load all illustration URLs
+const illustrations = {
+  'climate-finance.svg': await FileAttachment('climate-finance.svg').url(),
+  'ocean-waves.svg': await FileAttachment('ocean-waves.svg').url(),
+  'pacific-summit.svg': await FileAttachment('pacific-summit.svg').url(),
+  'coral-reef.svg': await FileAttachment('coral-reef.svg').url(),
+  'data-flow.svg': await FileAttachment('data-flow.svg').url(),
+  'global-network.svg': await FileAttachment('global-network.svg').url(),
+  'policy-document.svg': await FileAttachment('policy-document.svg').url(),
+  'renewable-energy.svg': await FileAttachment('renewable-energy.svg').url()
+};
+
+// Add illustration URLs to items
 for (const report of latestReports) {
-  if (report.illustration) {
-    report.illustrationUrl = await FileAttachment(report.illustration).url();
+  if (report.illustration && illustrations[report.illustration]) {
+    report.illustrationUrl = illustrations[report.illustration];
   }
 }
 
 for (const dashboard of latestDashboards) {
-  if (dashboard.illustration) {
-    dashboard.illustrationUrl = await FileAttachment(dashboard.illustration).url();
+  if (dashboard.illustration && illustrations[dashboard.illustration]) {
+    dashboard.illustrationUrl = illustrations[dashboard.illustration];
   }
 }
 
 for (const article of latestArticles) {
-  if (article.illustration) {
-    article.illustrationUrl = await FileAttachment(article.illustration).url();
+  if (article.illustration && illustrations[article.illustration]) {
+    article.illustrationUrl = illustrations[article.illustration];
   }
 }
 ```
@@ -213,61 +225,71 @@ display(html`
 `);
 ```
 
-<div class="content-section">
-  <div class="section-header">
-    <h2>Interactive Dashboards</h2>
-    <a href="/dashboards/" class="view-all">View all dashboards →</a>
-  </div>
-  <div class="news-grid">
-    ${latestDashboards.map(dashboard => html`
-      <a href="${dashboard.url}" class="news-card news-card--dashboard">
-        <div class="news-card__header">
-          ${dashboard.illustration ? html`
-            <div class="news-card__illustration">
-              <img src="${dashboard.illustrationUrl}" alt="">
-            </div>
-          ` : ''}
-        </div>
-        <div class="news-card__body">
-          <span class="news-card__type">Dashboard</span>
-          <h3 class="news-card__title">${dashboard.title}</h3>
-          <p class="news-card__excerpt">${dashboard.excerpt}</p>
-          <div class="news-card__meta">
-            <span class="news-card__date">Updated ${dashboard.dateFormatted}</span>
-          </div>
-        </div>
-      </a>
-    `)}
-  </div>
-</div>
-
-<div class="content-section">
-  <div class="section-header">
-    <h2>Latest News & Insights</h2>
-    <a href="/news/" class="view-all">View all news →</a>
-  </div>
-  <div class="news-grid">
-    ${latestArticles.map(article => html`
-      <a href="${article.url}" class="news-card news-card--${article.type}">
-        <div class="news-card__header">
-          ${article.illustration ? html`
-            <div class="news-card__illustration">
-              <img src="${article.illustrationUrl}" alt="">
-            </div>
-          ` : ''}
-        </div>
-        <div class="news-card__body">
-          <span class="news-card__type">${article.type}</span>
-          <h3 class="news-card__title">${article.title}</h3>
-          <p class="news-card__excerpt">${article.excerpt}</p>
-          <div class="news-card__meta">
-            <span class="news-card__date">${article.dateFormatted}</span>
-            ${article.read_time ? html`
-              <span class="news-card__read-time">${article.read_time}</span>
+```js
+// Display latest dashboards
+display(html`
+  <div class="content-section">
+    <div class="section-header">
+      <h2>Interactive Dashboards</h2>
+      <a href="/dashboards/" class="view-all">View all dashboards →</a>
+    </div>
+    <div class="news-grid">
+      ${latestDashboards.map(dashboard => html`
+        <a href="${dashboard.url}" class="news-card news-card--dashboard">
+          <div class="news-card__header">
+            ${dashboard.illustration ? html`
+              <div class="news-card__illustration">
+                <img src="${dashboard.illustrationUrl}" alt="">
+              </div>
             ` : ''}
           </div>
-        </div>
-      </a>
-    `)}
+          <div class="news-card__body">
+            <span class="news-card__type">Dashboard</span>
+            <h3 class="news-card__title">${dashboard.title}</h3>
+            <p class="news-card__excerpt">${dashboard.excerpt}</p>
+            <div class="news-card__meta">
+              <span class="news-card__date">Updated ${dashboard.dateFormatted}</span>
+            </div>
+          </div>
+        </a>
+      `)}
+    </div>
   </div>
-</div>
+`);
+```
+
+```js
+// Display latest news
+display(html`
+  <div class="content-section">
+    <div class="section-header">
+      <h2>Latest News & Insights</h2>
+      <a href="/news/" class="view-all">View all news →</a>
+    </div>
+    <div class="news-grid">
+      ${latestArticles.map(article => html`
+        <a href="${article.url}" class="news-card news-card--${article.type}">
+          <div class="news-card__header">
+            ${article.illustration ? html`
+              <div class="news-card__illustration">
+                <img src="${article.illustrationUrl}" alt="">
+              </div>
+            ` : ''}
+          </div>
+          <div class="news-card__body">
+            <span class="news-card__type">${article.type}</span>
+            <h3 class="news-card__title">${article.title}</h3>
+            <p class="news-card__excerpt">${article.excerpt}</p>
+            <div class="news-card__meta">
+              <span class="news-card__date">${article.dateFormatted}</span>
+              ${article.read_time ? html`
+                <span class="news-card__read-time">${article.read_time}</span>
+              ` : ''}
+            </div>
+          </div>
+        </a>
+      `)}
+    </div>
+  </div>
+`);
+```

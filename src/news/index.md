@@ -36,9 +36,18 @@ const featured = articles.filter(a => a.featured);
 const regular = articles.filter(a => !a.featured);
 
 // Pre-load illustration URLs
+const illustrations = {
+  'climate-finance.svg': await FileAttachment('../climate-finance.svg').url(),
+  'ocean-waves.svg': await FileAttachment('../ocean-waves.svg').url(),
+  'pacific-summit.svg': await FileAttachment('../pacific-summit.svg').url(),
+  'coral-reef.svg': await FileAttachment('../coral-reef.svg').url(),
+  'data-flow.svg': await FileAttachment('../data-flow.svg').url()
+};
+
+// Add illustration URLs to articles
 for (const article of articles) {
-  if (article.illustration) {
-    article.illustrationUrl = await FileAttachment(`../${article.illustration}`).url();
+  if (article.illustration && illustrations[article.illustration]) {
+    article.illustrationUrl = illustrations[article.illustration];
   }
 }
 ```
