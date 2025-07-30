@@ -1,0 +1,300 @@
+/* News Cards with Gradient Effects */
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-xl);
+  margin: var(--space-2xl) 0;
+}
+
+.news-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all var(--transition-base);
+  text-decoration: none;
+  color: inherit;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Card type variants with gradient backgrounds */
+.news-card--report {
+  border-top: 4px solid var(--color-teal-dark);
+}
+
+.news-card--report .news-card__header {
+  background: linear-gradient(135deg, var(--color-teal-dark) 0%, var(--color-teal) 100%);
+}
+
+.news-card--dashboard {
+  border-top: 4px solid var(--color-teal);
+}
+
+.news-card--dashboard .news-card__header {
+  background: linear-gradient(135deg, var(--color-teal) 0%, var(--color-turquoise) 100%);
+}
+
+.news-card--article {
+  border-top: 4px solid var(--color-turquoise);
+}
+
+.news-card--article .news-card__header {
+  background: linear-gradient(135deg, var(--color-turquoise) 0%, var(--color-aqua) 100%);
+}
+
+.news-card--brief {
+  border-top: 4px solid var(--color-aqua);
+}
+
+.news-card--brief .news-card__header {
+  background: linear-gradient(135deg, var(--color-aqua) 0%, var(--color-mint) 100%);
+}
+
+/* Card header with illustration */
+.news-card__header {
+  position: relative;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.news-card__illustration {
+  width: 120px;
+  height: 120px;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.news-card__illustration svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--color-white);
+}
+
+/* Card body */
+.news-card__body {
+  flex: 1;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card__type {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.news-card__title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.news-card__excerpt {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-md);
+  flex: 1;
+}
+
+/* Card metadata */
+.news-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.news-card__date {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.news-card__date::before {
+  content: "📅";
+  font-size: var(--font-size-base);
+}
+
+.news-card__read-time {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.news-card__read-time::before {
+  content: "⏱️";
+  font-size: var(--font-size-base);
+}
+
+/* Featured card */
+.news-card--featured {
+  grid-column: span 2;
+}
+
+.news-card--featured .news-card__header {
+  height: 300px;
+}
+
+.news-card--featured .news-card__illustration {
+  width: 180px;
+  height: 180px;
+}
+
+.news-card--featured .news-card__title {
+  font-size: var(--font-size-2xl);
+}
+
+/* Tags */
+.news-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+}
+
+.tag {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.tag:hover {
+  background-color: var(--color-teal);
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+/* Hover effects */
+.news-card:hover .news-card__title {
+  color: var(--color-teal);
+}
+
+.news-card:hover .news-card__illustration {
+  transform: scale(1.05);
+  transition: transform var(--transition-base);
+}
+
+/* Academic badges */
+.news-card__badges {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  background-color: var(--color-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge--doi {
+  color: var(--color-teal-dark);
+}
+
+.badge--pdf {
+  color: var(--color-slate);
+}
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-2xl);
+  flex-wrap: wrap;
+}
+
+.filter-bar__label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.filter-bar__options {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.filter-button {
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-button:hover {
+  background-color: var(--color-mint);
+  border-color: var(--color-teal);
+}
+
+.filter-button--active {
+  background-color: var(--color-teal);
+  color: var(--color-white);
+  border-color: var(--color-teal);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  
+  .news-card--featured {
+    grid-column: span 1;
+  }
+  
+  .news-card__header {
+    height: 160px;
+  }
+  
+  .news-card__illustration {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .filter-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

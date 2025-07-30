@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="news-page">
+  <header class="news-header">
+    <div class="container">
+      <h1>{{ title | default: "News & Insights" }}</h1>
+      {% if description %}
+      <p class="news-description">{{ description }}</p>
+      {% endif %}
+    </div>
+  </header>
+  
+  <!-- Filter bar -->
+  <div class="filter-section">
+    <div class="container">
+      <div class="filter-bar">
+        <div class="filter-bar__label">Filter by:</div>
+        
+        <div class="filter-bar__options">
+          <button class="filter-button filter-button--active" data-filter="all">
+            All
+          </button>
+          <button class="filter-button" data-filter="report">
+            Reports
+          </button>
+          <button class="filter-button" data-filter="dashboard">
+            Dashboards
+          </button>
+          <button class="filter-button" data-filter="article">
+            Articles
+          </button>
+          <button class="filter-button" data-filter="brief">
+            Briefs
+          </button>
+        </div>
+        
+        <div class="filter-bar__search">
+          <input type="search" 
+                 class="search-input" 
+                 placeholder="Search articles..."
+                 aria-label="Search articles">
+        </div>
+      </div>
+      
+      <!-- Active filters -->
+      <div class="active-filters" style="display: none;">
+        <span class="filters-label">Active filters:</span>
+        <div class="filter-chips"></div>
+        <button class="clear-filters">Clear all</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Featured content -->
+  {% if featured_items %}
+  <section class="featured-section">
+    <div class="container">
+      <h2 class="section-title">Featured</h2>
+      <div class="featured-grid">
+        {% for item in featured_items %}
+        <a href="{{ item.url }}" class="news-card news-card--featured news-card--{{ item.type }}">
+          <div class="news-card__header">
+            {% if item.illustration %}
+            <div class="news-card__illustration">
+              <img src="/assets/illustrations/{{ item.illustration }}" alt="">
+            </div>
+            {% endif %}
+            {% if item.doi or item.pdf %}
+            <div class="news-card__badges">
+              {% if item.doi %}<span class="badge badge--doi">DOI</span>{% endif %}
+              {% if item.pdf %}<span class="badge badge--pdf">PDF</span>{% endif %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="news-card__body">
+            <span class="news-card__type">{{ item.type | capitalize }}</span>
+            <h3 class="news-card__title">{{ item.title }}</h3>
+            <p class="news-card__excerpt">{{ item.excerpt }}</p>
+            <div class="news-card__meta">
+              <span class="news-card__date">{{ item.date | date: "%B %d, %Y" }}</span>
+              {% if item.read_time %}
+              <span class="news-card__read-time">{{ item.read_time }}</span>
+              {% endif %}
+            </div>
+            {% if item.tags %}
+            <div class="news-card__tags">
+              {% for tag in item.tags limit:3 %}
+              <span class="tag">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+  
+  <!-- All content -->
+  <section class="all-content">
+    <div class="container">
+      <h2 class="section-title">All Content</h2>
+      
+      <!-- Results info -->
+      <div class="results-info">
+        <span class="results-count">Showing <strong id="results-count">{{ items | size }}</strong> items</span>
+        <div class="sort-options">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" class="sort-select">
+            <option value="date-desc">Newest first</option>
+            <option value="date-asc">Oldest first</option>
+            <option value="title">Title A-Z</option>
+            <option value="type">Content type</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- News grid -->
+      <div class="news-grid" id="news-grid">
+        {% for item in items %}
+        <a href="{{ item.url }}" 
+           class="news-card news-card--{{ item.type }}"
+           data-type="{{ item.type }}"
+           data-date="{{ item.date | date: '%Y%m%d' }}"
+           data-tags="{{ item.tags | join: ',' }}"
+           data-title="{{ item.title | downcase }}">
+          <div class="news-card__header">
+            {% if item.illustration %}
+            <div class="news-card__illustration">
+              <img src="/assets/illustrations/{{ item.illustration }}" alt="">
+            </div>
+            {% endif %}
+            {% if item.doi or item.pdf %}
+            <div class="news-card__badges">
+              {% if item.doi %}<span class="badge badge--doi">DOI</span>{% endif %}
+              {% if item.pdf %}<span class="badge badge--pdf">PDF</span>{% endif %}
+            </div>
+            {% endif %}
+          </div>
+          <div class="news-card__body">
+            <span class="news-card__type">{{ item.type | capitalize }}</span>
+            <h3 class="news-card__title">{{ item.title }}</h3>
+            <p class="news-card__excerpt">{{ item.excerpt }}</p>
+            <div class="news-card__meta">
+              <span class="news-card__date">{{ item.date | date: "%B %d, %Y" }}</span>
+              {% if item.read_time %}
+              <span class="news-card__read-time">{{ item.read_time }}</span>
+              {% endif %}
+            </div>
+            {% if item.tags %}
+            <div class="news-card__tags">
+              {% for tag in item.tags limit:3 %}
+              <span class="tag">{{ tag }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      
+      <!-- No results message -->
+      <div class="no-results" style="display: none;">
+        <p>No items match your current filters.</p>
+        <button class="button button--secondary" onclick="clearAllFilters()">Clear filters</button>
+      </div>
+      
+      <!-- Load more -->
+      {% if has_more %}
+      <div class="load-more">
+        <button class="button button--primary" id="load-more-btn">
+          Load more
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+</div>
+
+<style>
+/* News page specific styles */
+.news-header {
+  background-color: var(--color-surface);
+  padding: var(--space-3xl) 0;
+  text-align: center;
+}
+
+.news-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-md);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Filter section */
+.filter-section {
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.filter-bar__search {
+  margin-left: auto;
+}
+
+.search-input {
+  padding: var(--space-sm) var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-base);
+  width: 250px;
+  transition: all var(--transition-fast);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--color-teal);
+  box-shadow: 0 0 0 3px rgba(49, 151, 149, 0.1);
+}
+
+/* Active filters */
+.active-filters {
+  padding: var(--space-md) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.filters-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.filter-chips {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--color-teal);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+}
+
+.filter-chip button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  margin-left: var(--space-xs);
+}
+
+.clear-filters {
+  background: none;
+  border: none;
+  color: var(--color-teal);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+}
+
+/* Sections */
+.featured-section,
+.all-content {
+  padding: var(--space-3xl) 0;
+}
+
+.section-title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-xl);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-3xl);
+}
+
+/* Results info */
+.results-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.results-count {
+  color: var(--color-text-muted);
+}
+
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.sort-select {
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-white);
+  font-size: var(--font-size-sm);
+}
+
+/* No results */
+.no-results {
+  text-align: center;
+  padding: var(--space-3xl) 0;
+  color: var(--color-text-muted);
+}
+
+.no-results p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-lg);
+}
+
+/* Load more */
+.load-more {
+  text-align: center;
+  margin-top: var(--space-3xl);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-bar__search {
+    margin-left: 0;
+    margin-top: var(--space-md);
+    width: 100%;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .results-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-md);
+  }
+}
+</style>
+
+<script>
+// News filtering and sorting functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const filterButtons = document.querySelectorAll('.filter-button');
+  const searchInput = document.querySelector('.search-input');
+  const sortSelect = document.getElementById('sort-select');
+  const newsGrid = document.getElementById('news-grid');
+  const newsCards = Array.from(newsGrid.querySelectorAll('.news-card'));
+  const resultsCount = document.getElementById('results-count');
+  const noResults = document.querySelector('.no-results');
+  
+  let currentFilter = 'all';
+  let currentSearch = '';
+  
+  // Filter functionality
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(b => b.classList.remove('filter-button--active'));
+      button.classList.add('filter-button--active');
+      currentFilter = button.dataset.filter;
+      applyFilters();
+    });
+  });
+  
+  // Search functionality
+  searchInput.addEventListener('input', (e) => {
+    currentSearch = e.target.value.toLowerCase();
+    applyFilters();
+  });
+  
+  // Sort functionality
+  sortSelect.addEventListener('change', () => {
+    sortCards();
+  });
+  
+  function applyFilters() {
+    let visibleCount = 0;
+    
+    newsCards.forEach(card => {
+      const type = card.dataset.type;
+      const title = card.dataset.title;
+      const tags = card.dataset.tags;
+      
+      const matchesFilter = currentFilter === 'all' || type === currentFilter;
+      const matchesSearch = !currentSearch || 
+        title.includes(currentSearch) || 
+        tags.includes(currentSearch);
+      
+      if (matchesFilter && matchesSearch) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    
+    resultsCount.textContent = visibleCount;
+    noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+  
+  function sortCards() {
+    const sortValue = sortSelect.value;
+    
+    const sortedCards = [...newsCards].sort((a, b) => {
+      switch(sortValue) {
+        case 'date-desc':
+          return b.dataset.date.localeCompare(a.dataset.date);
+        case 'date-asc':
+          return a.dataset.date.localeCompare(b.dataset.date);
+        case 'title':
+          return a.dataset.title.localeCompare(b.dataset.title);
+        case 'type':
+          return a.dataset.type.localeCompare(b.dataset.type);
+        default:
+          return 0;
+      }
+    });
+    
+    // Re-append cards in sorted order
+    sortedCards.forEach(card => {
+      newsGrid.appendChild(card);
+    });
+  }
+  
+  // Load more functionality
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      // Implement load more functionality
+      console.log('Loading more items...');
+    });
+  }
+});
+
+function clearAllFilters() {
+  // Reset all filters
+  document.querySelector('[data-filter="all"]').click();
+  document.querySelector('.search-input').value = '';
+  document.querySelector('.search-input').dispatchEvent(new Event('input'));
+}
+</script>
+{% endblock %}

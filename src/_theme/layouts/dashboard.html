@@ -1,0 +1,420 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+  <header class="dashboard-header">
+    <div class="container">
+      <h1>{{ title }}</h1>
+      {% if excerpt %}
+      <p class="dashboard-description">{{ excerpt }}</p>
+      {% endif %}
+      
+      <div class="dashboard-meta">
+        <time datetime="{{ date | date: '%Y-%m-%d' }}">
+          Last updated: {{ date | date: "%B %d, %Y" }}
+        </time>
+        {% if read_time %}
+        <span class="read-time">{{ read_time }} to explore</span>
+        {% endif %}
+      </div>
+      
+      {% if has_controls %}
+      <div class="dashboard-controls no-print">
+        <div class="control-group">
+          <label for="date-range">Date Range:</label>
+          <select id="date-range" class="control-select">
+            <option value="all">All Time</option>
+            <option value="year">Past Year</option>
+            <option value="quarter">Past Quarter</option>
+            <option value="month">Past Month</option>
+          </select>
+        </div>
+        
+        <div class="control-group">
+          <label for="region-filter">Region:</label>
+          <select id="region-filter" class="control-select">
+            <option value="all">All Regions</option>
+            <option value="pacific">Pacific</option>
+            <option value="asia">Asia</option>
+            <option value="americas">Americas</option>
+            <option value="europe">Europe</option>
+            <option value="africa">Africa</option>
+          </select>
+        </div>
+        
+        <button class="button button--ghost" onclick="resetFilters()">
+          Reset Filters
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </header>
+  
+  <main class="dashboard-content">
+    <!-- Key metrics section -->
+    {% if key_metrics %}
+    <section class="metrics-section">
+      <div class="container">
+        <div class="metrics-grid">
+          {% for metric in key_metrics %}
+          <div class="metric-card">
+            <h3 class="metric-label">{{ metric.label }}</h3>
+            <div class="metric-value">{{ metric.value }}</div>
+            {% if metric.change %}
+            <div class="metric-change {% if metric.change > 0 %}positive{% else %}negative{% endif %}">
+              {% if metric.change > 0 %}+{% endif %}{{ metric.change }}%
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    
+    <!-- Main content with visualizations -->
+    <div class="dashboard-main">
+      {{ content }}
+      
+      <!-- Dynamic visualization grid -->
+      {% if has_visualizations %}
+      <div class="dashboard-viz-grid">
+        {% for viz in visualization_modules %}
+        <div class="dashboard-viz-item {% if viz.size %}dashboard-viz-item--{{ viz.size }}{% endif %}">
+          <div class="viz-card">
+            {% if viz.title %}
+            <h3 class="viz-title">{{ viz.title }}</h3>
+            {% endif %}
+            
+            <div id="viz-{{ forloop.index }}" 
+                 class="viz-mount-point viz-mount-point--dashboard"
+                 data-viz-module="/{{ viz.module | default: viz }}"
+                 data-viz-config='{{ viz.config | jsonify }}'>
+              <!-- Loading state -->
+              <div class="viz-loading">
+                <div class="spinner"></div>
+                <p>Loading visualization...</p>
+              </div>
+            </div>
+            
+            {% if viz.description %}
+            <p class="viz-description">{{ viz.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    
+    <!-- Data sources and notes -->
+    <footer class="dashboard-footer">
+      <div class="container">
+        {% if data_sources %}
+        <div class="data-sources">
+          <h3>Data Sources</h3>
+          <ul>
+            {% for source in data_sources %}
+            <li>
+              {% if source.url %}
+              <a href="{{ source.url }}" target="_blank" rel="noopener">{{ source.name }}</a>
+              {% else %}
+              {{ source.name | default: source }}
+              {% endif %}
+              {% if source.updated %}
+              <span class="source-date">(Updated: {{ source.updated }})</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if notes %}
+        <div class="dashboard-notes">
+          <h3>Notes</h3>
+          {{ notes | markdownify }}
+        </div>
+        {% endif %}
+        
+        <div class="dashboard-actions no-print">
+          <button onclick="exportDashboard()" class="button button--primary">
+            Export Data
+          </button>
+          <button onclick="window.print()" class="button button--secondary">
+            Print Dashboard
+          </button>
+          <button onclick="shareDashboard()" class="button button--ghost">
+            Share
+          </button>
+        </div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<style>
+/* Dashboard-specific styles */
+.dashboard {
+  min-height: 100vh;
+  background-color: var(--color-surface);
+}
+
+.dashboard-header {
+  background-color: var(--color-white);
+  padding: var(--space-2xl) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dashboard-description {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-md);
+}
+
+.dashboard-meta {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.dashboard-controls {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.control-select {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-white);
+}
+
+/* Metrics section */
+.metrics-section {
+  padding: var(--space-2xl) 0;
+  background-color: var(--color-white);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+.metric-card {
+  text-align: center;
+  padding: var(--space-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+}
+
+.metric-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+}
+
+.metric-value {
+  font-size: var(--font-size-4xl);
+  font-weight: 700;
+  color: var(--color-teal);
+}
+
+.metric-change {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-sm);
+}
+
+.metric-change.positive {
+  color: var(--color-teal);
+}
+
+.metric-change.negative {
+  color: var(--color-slate);
+}
+
+/* Visualization grid */
+.dashboard-viz-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-lg);
+  padding: var(--space-2xl) 0;
+}
+
+.dashboard-viz-item {
+  grid-column: span 6;
+}
+
+.dashboard-viz-item--small {
+  grid-column: span 4;
+}
+
+.dashboard-viz-item--large {
+  grid-column: span 8;
+}
+
+.dashboard-viz-item--full {
+  grid-column: span 12;
+}
+
+.viz-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--space-lg);
+  height: 100%;
+}
+
+.viz-title {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--space-md);
+}
+
+.viz-mount-point--dashboard {
+  min-height: 300px;
+}
+
+.viz-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-md);
+}
+
+/* Footer */
+.dashboard-footer {
+  background-color: var(--color-white);
+  padding: var(--space-2xl) 0;
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-3xl);
+}
+
+.data-sources,
+.dashboard-notes {
+  margin-bottom: var(--space-xl);
+}
+
+.data-sources ul {
+  list-style: none;
+  padding: 0;
+}
+
+.data-sources li {
+  padding: var(--space-xs) 0;
+}
+
+.source-date {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-viz-item,
+  .dashboard-viz-item--small,
+  .dashboard-viz-item--large {
+    grid-column: span 12;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .control-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print styles */
+@media print {
+  .dashboard {
+    background-color: white;
+  }
+  
+  .dashboard-viz-item {
+    page-break-inside: avoid;
+  }
+  
+  .viz-mount-point--dashboard {
+    min-height: 0;
+    height: auto !important;
+  }
+}
+</style>
+
+<script>
+// Dashboard interactivity
+function resetFilters() {
+  document.getElementById('date-range').value = 'all';
+  document.getElementById('region-filter').value = 'all';
+  // Trigger filter change event
+  window.dispatchEvent(new CustomEvent('filtersChanged', {
+    detail: {
+      dateRange: 'all',
+      region: 'all'
+    }
+  }));
+}
+
+function exportDashboard() {
+  // Implement data export functionality
+  console.log('Exporting dashboard data...');
+}
+
+function shareDashboard() {
+  const shareData = {
+    title: '{{ title }}',
+    text: '{{ excerpt }}',
+    url: window.location.href
+  };
+  
+  if (navigator.share) {
+    navigator.share(shareData);
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Dashboard link copied to clipboard!');
+  }
+}
+
+// Listen for filter changes
+document.getElementById('date-range')?.addEventListener('change', (e) => {
+  window.dispatchEvent(new CustomEvent('filtersChanged', {
+    detail: {
+      dateRange: e.target.value,
+      region: document.getElementById('region-filter').value
+    }
+  }));
+});
+
+document.getElementById('region-filter')?.addEventListener('change', (e) => {
+  window.dispatchEvent(new CustomEvent('filtersChanged', {
+    detail: {
+      dateRange: document.getElementById('date-range').value,
+      region: e.target.value
+    }
+  }));
+});
+</script>
+{% endblock %}

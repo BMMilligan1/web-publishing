@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} - {{ site.title }}</title>
+  
+  <!-- Meta tags -->
+  <meta name="description" content="{{ excerpt | default: site.description }}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ excerpt | default: site.description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ excerpt | default: site.description }}">
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/cards.css">
+  <link rel="stylesheet" href="/assets/css/viz.css">
+  <link rel="stylesheet" href="/assets/css/print.css" media="print">
+  
+  <!-- Observable Runtime -->
+  <script type="module">
+    import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js";
+    window.observableRuntime = {Runtime, Inspector};
+  </script>
+  
+  <!-- Custom head content -->
+  {% block head %}{% endblock %}
+</head>
+<body class="{{ type }}">
+  <!-- Skip to content -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  <header class="site-header no-print">
+    <div class="container">
+      <div class="site-header__inner">
+        <a href="/" class="site-logo">
+          <span class="site-title">{{ site.title }}</span>
+        </a>
+        
+        <nav class="site-nav" aria-label="Main navigation">
+          <ul class="nav-list">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/reports/" class="nav-link">Reports</a></li>
+            <li><a href="/dashboards/" class="nav-link">Dashboards</a></li>
+            <li><a href="/news/" class="nav-link">News</a></li>
+            <li><a href="/about/" class="nav-link">About</a></li>
+          </ul>
+        </nav>
+        
+        <!-- Mobile menu button -->
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span class="menu-icon"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Main content -->
+  <main id="main" class="site-main">
+    {% block content %}{% endblock %}
+  </main>
+  
+  <!-- Footer -->
+  <footer class="site-footer no-print">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>{{ site.title }}</h3>
+          <p>{{ site.description }}</p>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/reports/">Reports</a></li>
+            <li><a href="/dashboards/">Dashboards</a></li>
+            <li><a href="/news/">News</a></li>
+            <li><a href="/about/">About</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <p>{{ site.contact.email }}</p>
+          <p>{{ site.contact.address }}</p>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; {{ 'now' | date: '%Y' }} {{ site.title }}. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Scripts -->
+  <script type="module" src="/assets/js/viz-loader.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

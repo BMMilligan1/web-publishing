@@ -1,0 +1,56 @@
+year,source_country,source_type,recipient_region,sector,amount_million_usd,finance_type
+2014,USA,Public,Asia,Energy,2340,Grant
+2014,Germany,Public,Africa,Agriculture,450,Concessional Loan
+2014,Japan,Private,Latin America,Transport,1200,Investment
+2014,UK,Public,Pacific,Adaptation,120,Grant
+2014,France,Public,Africa,Energy,890,Concessional Loan
+2015,USA,Public,Asia,Energy,2890,Grant
+2015,Germany,Public,Africa,Agriculture,520,Concessional Loan
+2015,Japan,Private,Latin America,Transport,1450,Investment
+2015,UK,Public,Pacific,Adaptation,145,Grant
+2015,France,Public,Africa,Energy,1100,Concessional Loan
+2016,USA,Public,Asia,Energy,3200,Grant
+2016,Germany,Public,Africa,Agriculture,610,Concessional Loan
+2016,Japan,Private,Latin America,Transport,1680,Investment
+2016,UK,Public,Pacific,Adaptation,168,Grant
+2016,France,Public,Africa,Energy,1250,Concessional Loan
+2017,USA,Public,Asia,Energy,3450,Grant
+2017,Germany,Public,Africa,Agriculture,690,Concessional Loan
+2017,Japan,Private,Latin America,Transport,1920,Investment
+2017,UK,Public,Pacific,Adaptation,195,Grant
+2017,France,Public,Africa,Energy,1420,Concessional Loan
+2018,USA,Public,Asia,Energy,3890,Grant
+2018,Germany,Public,Africa,Agriculture,780,Concessional Loan
+2018,Japan,Private,Latin America,Transport,2200,Investment
+2018,UK,Public,Pacific,Adaptation,225,Grant
+2018,France,Public,Africa,Energy,1680,Concessional Loan
+2019,USA,Public,Asia,Energy,4200,Grant
+2019,Germany,Public,Africa,Agriculture,890,Concessional Loan
+2019,Japan,Private,Latin America,Transport,2450,Investment
+2019,UK,Public,Pacific,Adaptation,260,Grant
+2019,France,Public,Africa,Energy,1920,Concessional Loan
+2020,USA,Public,Asia,Energy,4100,Grant
+2020,Germany,Public,Africa,Agriculture,850,Concessional Loan
+2020,Japan,Private,Latin America,Transport,2300,Investment
+2020,UK,Public,Pacific,Adaptation,240,Grant
+2020,France,Public,Africa,Energy,1850,Concessional Loan
+2021,USA,Public,Asia,Energy,4800,Grant
+2021,Germany,Public,Africa,Agriculture,1020,Concessional Loan
+2021,Japan,Private,Latin America,Transport,2780,Investment
+2021,UK,Public,Pacific,Adaptation,320,Grant
+2021,France,Public,Africa,Energy,2200,Concessional Loan
+2022,USA,Public,Asia,Energy,5400,Grant
+2022,Germany,Public,Africa,Agriculture,1180,Concessional Loan
+2022,Japan,Private,Latin America,Transport,3200,Investment
+2022,UK,Public,Pacific,Adaptation,380,Grant
+2022,France,Public,Africa,Energy,2580,Concessional Loan
+2023,USA,Public,Asia,Energy,6200,Grant
+2023,Germany,Public,Africa,Agriculture,1350,Concessional Loan
+2023,Japan,Private,Latin America,Transport,3680,Investment
+2023,UK,Public,Pacific,Adaptation,450,Grant
+2023,France,Public,Africa,Energy,2950,Concessional Loan
+2024,USA,Public,Asia,Energy,7100,Grant
+2024,Germany,Public,Africa,Agriculture,1580,Concessional Loan
+2024,Japan,Private,Latin America,Transport,4200,Investment
+2024,UK,Public,Pacific,Adaptation,520,Grant
+2024,France,Public,Africa,Energy,3400,Concessional Loan

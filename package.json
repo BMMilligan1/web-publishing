@@ -10,16 +10,32 @@
     "pdf:export": "cd pdf-export && npm run export",
     "pdf:build": "npm run build && npm run pdf:export",
     "pdf:watch": "cd pdf-export && npm run export:watch",
-    "pdf:install": "cd pdf-export && npm install"
+    "pdf:install": "cd pdf-export && npm install",
+    "process:content": "node src/build-scripts/process-observable-content.js",
+    "generate:pdfs": "node src/build-scripts/generate-pdfs.js",
+    "mint:dois": "node src/build-scripts/mint-dois.js",
+    "generate:illustrations": "node src/build-scripts/generate-illustrations.js",
+    "build:news": "node src/build-scripts/generate-news-pages.js",
+    "build:all": "npm run build && npm run process:content && npm run build:news && npm run generate:pdfs && npm run mint:dois",
+    "update:dois": "node src/build-scripts/update-doi-references.js"
   },
   "dependencies": {
     "@observablehq/framework": "^1.13.3",
+    "@observablehq/runtime": "^5.9.0",
+    "@observablehq/inspector": "^5.0.0",
+    "d3": "^7.8.5",
     "d3-dsv": "^3.0.1",
     "d3-time-format": "^4.1.0",
-    "markdown-it-footnote": "^4.0.0"
+    "markdown-it-footnote": "^4.0.0",
+    "gray-matter": "^4.0.3",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "puppeteer": "^21.5.0",
+    "jsdom": "^22.1.0",
+    "pagefind": "^1.0.3"
   },
   "engines": {
     "node": ">=18"

@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Academic metadata -->
+{% if doi %}
+<meta name="citation_doi" content="{{ doi }}">
+<meta name="citation_title" content="{{ title }}">
+<meta name="citation_publication_date" content="{{ date | date: '%Y/%m/%d' }}">
+{% for author in authors %}
+<meta name="citation_author" content="{{ author.name }}">
+{% endfor %}
+<meta name="citation_pdf_url" content="{{ site.url }}{{ pdf_url }}">
+{% endif %}
+
+<!-- Schema.org structured data -->
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "ScholarlyArticle",
+  "headline": "{{ title }}",
+  "datePublished": "{{ date | date: '%Y-%m-%d' }}",
+  {% if doi %}"identifier": {
+    "@type": "PropertyValue",
+    "propertyID": "doi",
+    "value": "{{ doi }}"
+  },{% endif %}
+  "author": [
+    {% for author in authors %}
+    {
+      "@type": "Person",
+      "name": "{{ author.name }}"{% if author.orcid %},
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "ORCID",
+        "value": "{{ author.orcid }}"
+      }{% endif %}{% if author.affiliation %},
+      "affiliation": {
+        "@type": "Organization",
+        "name": "{{ author.affiliation }}"
+      }{% endif %}
+    }{% if forloop.last == false %},{% endif %}
+    {% endfor %}
+  ],
+  "description": "{{ abstract | default: excerpt }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="report" itemscope itemtype="http://schema.org/ScholarlyArticle">
+  <div class="container container--narrow">
+    <header class="report-header">
+      <h1 itemprop="headline">{{ title }}</h1>
+      
+      <div class="report-meta">
+        <div class="authors" itemprop="author">
+          {% for author in authors %}
+          <span class="author">
+            <span itemprop="name">{{ author.name }}</span>
+            {% if author.orcid %}
+            <a href="https://orcid.org/{{ author.orcid }}" class="orcid" target="_blank" rel="noopener">
+              <img src="/assets/icons/orcid.svg" alt="ORCID" width="16" height="16">
+            </a>
+            {% endif %}
+            {% if author.affiliation %}
+            <span class="affiliation">({{ author.affiliation }})</span>
+            {% endif %}
+          </span>
+          {% endfor %}
+        </div>
+        
+        <time datetime="{{ date | date: '%Y-%m-%d' }}" itemprop="datePublished" class="publication-date">
+          {{ date | date: "%B %d, %Y" }}
+        </time>
+        
+        {% if doi %}
+        <div class="doi-section">
+          <a href="https://doi.org/{{ doi }}" class="doi-badge no-print" target="_blank" rel="noopener">
+            DOI: {{ doi }}
+          </a>
+          <span class="doi-badge-print" style="display: none;">DOI: {{ doi }}</span>
+        </div>
+        {% endif %}
+      </div>
+      
+      <div class="report-actions no-print">
+        {% if pdf_url %}
+        <a href="{{ pdf_url }}" class="button button--primary" download>
+          <svg width="16" height="16" fill="currentColor" style="margin-right: 0.5rem;">
+            <use href="/assets/icons/sprite.svg#download"></use>
+          </svg>
+          Download PDF
+        </a>
+        {% endif %}
+        <button onclick="window.print()" class="button button--secondary">
+          <svg width="16" height="16" fill="currentColor" style="margin-right: 0.5rem;">
+            <use href="/assets/icons/sprite.svg#print"></use>
+          </svg>
+          Print
+        </button>
+        <button onclick="shareReport()" class="button button--ghost">
+          <svg width="16" height="16" fill="currentColor" style="margin-right: 0.5rem;">
+            <use href="/assets/icons/sprite.svg#share"></use>
+          </svg>
+          Share
+        </button>
+      </div>
+    </header>
+    
+    {% if abstract %}
+    <section class="abstract" itemprop="abstract">
+      <h2>Abstract</h2>
+      <p>{{ abstract }}</p>
+    </section>
+    {% endif %}
+    
+    {% if tags %}
+    <div class="report-tags">
+      <h3 class="sr-only">Keywords</h3>
+      <div class="tags">
+        {% for tag in tags %}
+        <a href="/tags/{{ tag | slugify }}/" class="tag" itemprop="keywords">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  
+  <div class="container">
+    <div class="report-content" itemprop="articleBody">
+      {{ content }}
+      
+      <!-- Dynamic visualization containers -->
+      {% if has_visualizations %}
+      <div class="visualizations-section">
+        {% for viz in visualization_modules %}
+        <figure class="visualization-container" id="viz-figure-{{ forloop.index }}">
+          <div id="viz-{{ forloop.index }}" 
+               class="viz-mount-point"
+               data-viz-module="/{{ viz }}"
+               data-viz-data="{{ data_sources[forloop.index0] | default: '' }}">
+            <!-- Static fallback rendered at build time -->
+            {% if static_visualizations[forloop.index0] %}
+            <div class="static-viz-fallback">
+              {{ static_visualizations[forloop.index0] }}
+            </div>
+            {% endif %}
+          </div>
+          {% if viz_captions[forloop.index0] %}
+          <figcaption>Figure {{ forloop.index }}: {{ viz_captions[forloop.index0] }}</figcaption>
+          {% endif %}
+        </figure>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="container container--narrow">
+    {% if references %}
+    <section class="references">
+      <h2>References</h2>
+      <ol class="reference-list">
+        {% for ref in references %}
+        <li id="ref-{{ forloop.index }}" class="reference-item">
+          {{ ref }}
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+    
+    <footer class="report-footer">
+      <div class="citation-info">
+        <h3>How to cite this report</h3>
+        <p class="citation">
+          {% for author in authors %}{{ author.name }}{% if forloop.last == false %}, {% endif %}{% endfor %} 
+          ({{ date | date: "%Y" }}). 
+          {{ title }}. 
+          {% if doi %}https://doi.org/{{ doi }}{% else %}{{ site.url }}{{ page.url }}{% endif %}
+        </p>
+      </div>
+      
+      {% if license %}
+      <div class="license-info">
+        <p>This work is licensed under <a href="{{ license.url }}" target="_blank" rel="license noopener">{{ license.name }}</a>.</p>
+      </div>
+      {% endif %}
+    </footer>
+  </div>
+</article>
+
+<script>
+function shareReport() {
+  const shareData = {
+    title: '{{ title }}',
+    text: '{{ abstract | default: excerpt | truncate: 100 }}',
+    url: window.location.href
+  };
+  
+  if (navigator.share) {
+    navigator.share(shareData);
+  } else {
+    // Fallback to copy URL
+    navigator.clipboard.writeText(window.location.href);
+    alert('Link copied to clipboard!');
+  }
+}
+</script>
+{% endblock %}

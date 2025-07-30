@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Climate Finance Flows: A Decade of Change",
+    "type": "report",
+    "date": "2024-01-10",
+    "excerpt": "Comprehensive analysis of global climate finance from 2014-2024, revealing critical gaps in adaptation funding.",
+    "illustration": "climate-finance.svg",
+    "authors": ["Dr. Sarah Chen", "Prof. James Mitchell"],
+    "tags": ["climate-finance", "adaptation", "mitigation"],
+    "doi": "10.5555/climate-finance-2024",
+    "pdf": true,
+    "has_visualizations": true,
+    "slug": "2024-climate-finance-flows",
+    "url": "/reports/2024-climate-finance-flows/",
+    "dateFormatted": "January 10, 2024",
+    "hasDoi": true,
+    "hasPdf": true
+  },
+  {
+    "title": "Pacific Ocean Health Report 2023",
+    "type": "report",
+    "date": "2023-12-15",
+    "excerpt": "Annual assessment of marine ecosystem health across the Pacific region with focus on coral reef systems.",
+    "illustration": "ocean-waves.svg",
+    "authors": ["Dr. Maria Santos", "Dr. Kenji Tanaka"],
+    "tags": ["ocean", "biodiversity", "coral-reefs"],
+    "doi": "10.5555/pacific-ocean-2023",
+    "pdf": true,
+    "slug": "pacific-ocean-health-2023",
+    "url": "/reports/pacific-ocean-health-2023/",
+    "dateFormatted": "December 15, 2023",
+    "hasDoi": true,
+    "hasPdf": true
+  },
+  {
+    "title": "Small Island States Climate Adaptation",
+    "type": "report",
+    "date": "2023-11-20",
+    "excerpt": "Policy recommendations for enhancing climate resilience in Small Island Developing States.",
+    "illustration": "coral-reef.svg",
+    "authors": ["Dr. Ana Pereira", "Dr. Robert Kim"],
+    "tags": ["adaptation", "SIDS", "policy"],
+    "pdf": true,
+    "slug": "sids-climate-adaptation",
+    "url": "/reports/sids-climate-adaptation/",
+    "dateFormatted": "November 20, 2023",
+    "hasDoi": false,
+    "hasPdf": true
+  }
+]

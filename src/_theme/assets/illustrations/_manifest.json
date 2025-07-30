@@ -1,0 +1,48 @@
+{
+  "generated": "2025-07-30T08:52:43.253Z",
+  "total": 8,
+  "successful": 8,
+  "failed": 0,
+  "illustrations": [
+    {
+      "name": "climate-finance",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/climate-finance.svg"
+    },
+    {
+      "name": "ocean-waves",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/ocean-waves.svg"
+    },
+    {
+      "name": "pacific-summit",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/pacific-summit.svg"
+    },
+    {
+      "name": "data-flow",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/data-flow.svg"
+    },
+    {
+      "name": "global-network",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/global-network.svg"
+    },
+    {
+      "name": "policy-document",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/policy-document.svg"
+    },
+    {
+      "name": "renewable-energy",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/renewable-energy.svg"
+    },
+    {
+      "name": "coral-reef",
+      "success": true,
+      "path": "/Users/benmilligan/github/web-publishing/src/_theme/assets/illustrations/coral-reef.svg"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+name: Build and Deploy Complete Static Site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      mint_dois:
+        description: 'Mint DOIs for new reports'
+        type: boolean
+        default: false
+
+env:
+  ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build Observable Framework site
+        run: |
+          echo "Building Observable Framework site..."
+          npm run build
+          
+      - name: Process Observable content for static rendering
+        run: |
+          echo "Processing Observable visualizations..."
+          npm run process:content
+          
+      - name: Generate news pages and cards
+        run: |
+          echo "Generating news pages..."
+          npm run build:news
+          
+      - name: Generate illustrations
+        run: |
+          echo "Generating illustrations..."
+          npm run generate:illustrations
+        continue-on-error: true
+          
+      - name: Install PDF dependencies
+        run: |
+          echo "Installing Puppeteer dependencies..."
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libdrm2 \
+            libxkbcommon0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            libgbm1 \
+            libasound2
+            
+      - name: Generate PDFs for flagged content
+        run: |
+          echo "Generating PDFs..."
+          npm run generate:pdfs
+          
+      - name: Upload PDFs as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pdf-reports
+          path: dist/pdfs/
+          retention-days: 30
+          
+      - name: Mint DOIs via Zenodo
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.inputs.mint_dois == 'true')
+        run: |
+          echo "Minting DOIs..."
+          npm run mint:dois
+        continue-on-error: true
+        
+      - name: Update content with DOIs
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Updating DOI references..."
+          npm run update:dois
+        continue-on-error: true
+        
+      - name: Generate search index
+        run: |
+          echo "Generating search index with Pagefind..."
+          npx pagefind --source dist --bundle-dir dist/_pagefind
+          
+      - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/main'
+        uses: nwtgck/actions-netlify@v2.1
+        with:
+          publish-dir: './dist'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions - ${{ github.sha }}"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          
+      - name: Create deployment summary
+        if: always()
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "dist/_dois/summary.json" ]; then
+            echo "### DOI Minting Results" >> $GITHUB_STEP_SUMMARY
+            cat dist/_dois/summary.json | jq -r '.dois[] | "- \(.file): \(.doi // .error)"' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "dist/pdfs/_summary.json" ]; then
+            echo "### PDF Generation Results" >> $GITHUB_STEP_SUMMARY
+            echo "- Total PDFs: $(cat dist/pdfs/_summary.json | jq .total)" >> $GITHUB_STEP_SUMMARY
+            echo "- Successful: $(cat dist/pdfs/_summary.json | jq .successful)" >> $GITHUB_STEP_SUMMARY
+            echo "- Failed: $(cat dist/pdfs/_summary.json | jq .failed)" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # Separate job for PR previews
+  preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build site
+        run: npm run build
+        
+      - name: Deploy preview to Netlify
+        uses: nwtgck/actions-netlify@v2.1
+        with:
+          publish-dir: './dist'
+          production-deploy: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "PR Preview - ${{ github.event.pull_request.title }}"
+          enable-pull-request-comment: true
+          enable-commit-comment: false
+          overwrites-pull-request-comment: true
+          alias: pr-${{ github.event.pull_request.number }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

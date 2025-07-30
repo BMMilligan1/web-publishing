@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Pacific Climate Summit 2024 Outcomes",
+    "type": "news",
+    "date": "2024-01-25",
+    "excerpt": "Key agreements reached on ocean conservation funding and regional cooperation frameworks.",
+    "illustration": "pacific-summit.svg",
+    "tags": ["policy", "pacific", "climate-finance"],
+    "featured": true,
+    "read_time": "5 min read",
+    "slug": "2024-01-25-pacific-climate-summit",
+    "url": "/news/2024-01-25-pacific-climate-summit/",
+    "dateFormatted": "January 25, 2024"
+  },
+  {
+    "title": "New Report: Climate Finance Flows 2023",
+    "type": "announcement",
+    "date": "2024-01-20",
+    "excerpt": "Our latest analysis reveals critical gaps in adaptation funding for small island developing states.",
+    "illustration": "climate-finance.svg",
+    "tags": ["finance", "report", "adaptation"],
+    "read_time": "3 min read",
+    "slug": "climate-finance-report-2023",
+    "url": "/news/climate-finance-report-2023/",
+    "dateFormatted": "January 20, 2024"
+  },
+  {
+    "title": "Ocean Health Dashboard Launch",
+    "type": "update",
+    "date": "2024-01-15",
+    "excerpt": "Interactive visualization tools now available for tracking marine ecosystem indicators.",
+    "illustration": "ocean-waves.svg",
+    "tags": ["data", "ocean", "visualization"],
+    "read_time": "4 min read",
+    "slug": "ocean-dashboard-launch",
+    "url": "/news/ocean-dashboard-launch/",
+    "dateFormatted": "January 15, 2024"
+  }
+]

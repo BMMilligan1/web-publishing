@@ -1,0 +1,28 @@
+[
+  {
+    "title": "Ocean Health Tracker",
+    "type": "dashboard",
+    "date": "2024-01-28",
+    "excerpt": "Real-time monitoring of ocean temperature, pH levels, and biodiversity indicators across the Pacific.",
+    "illustration": "ocean-waves.svg",
+    "tags": ["ocean", "monitoring", "real-time"],
+    "update_frequency": "Daily",
+    "data_sources": ["NOAA", "IOC-UNESCO"],
+    "slug": "ocean-health-tracker",
+    "url": "/dashboards/ocean-health-tracker/",
+    "dateFormatted": "January 28, 2024"
+  },
+  {
+    "title": "Climate Finance Flow Visualizer",
+    "type": "dashboard",
+    "date": "2024-01-25",
+    "excerpt": "Interactive visualization of global climate finance flows between countries and sectors.",
+    "illustration": "data-flow.svg",
+    "tags": ["finance", "visualization", "interactive"],
+    "update_frequency": "Monthly",
+    "data_sources": ["OECD", "World Bank", "Climate Funds Update"],
+    "slug": "climate-finance-visualizer",
+    "url": "/dashboards/climate-finance-visualizer/",
+    "dateFormatted": "January 25, 2024"
+  }
+]

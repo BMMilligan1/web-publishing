@@ -1,111 +1,273 @@
 ---
-toc: true
+title: Home
 ---
-
-<div class="hero">
-  <h1>Technical Report</h1>
-  <h2>Welcome to your new app! Edit&nbsp;<code style="font-size: 90%;">src/index.md</code> to change this page.</h2>
-  <a href="https://observablehq.com/framework/getting-started">Get started<span style="display: inline-block; margin-left: 0.25rem;">↗︎</span></a>
-</div>
-
-<div class="grid grid-cols-2" style="grid-auto-rows: 504px;">
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "Your awesomeness over time 🚀",
-      subtitle: "Up and to the right!",
-      width,
-      y: {grid: true, label: "Awesomeness"},
-      marks: [
-        Plot.ruleY([0]),
-        Plot.lineY(aapl, {x: "Date", y: "Close", tip: true})
-      ]
-    }))
-  }</div>
-  <div class="card">${
-    resize((width) => Plot.plot({
-      title: "How big are penguins, anyway? 🐧",
-      width,
-      grid: true,
-      x: {label: "Body mass (g)"},
-      y: {label: "Flipper length (mm)"},
-      color: {legend: true},
-      marks: [
-        Plot.linearRegressionY(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species"}),
-        Plot.dot(penguins, {x: "body_mass_g", y: "flipper_length_mm", stroke: "species", tip: true})
-      ]
-    }))
-  }</div>
-</div>
-
----
-
-## Next steps
-
-Here are some ideas of things you could try…
-
-<div class="grid grid-cols-4">
-  <div class="card">
-    Chart your own data using <a href="https://observablehq.com/framework/lib/plot"><code>Plot</code></a> and <a href="https://observablehq.com/framework/files"><code>FileAttachment</code></a>. Make it responsive using <a href="https://observablehq.com/framework/javascript#resize(render)"><code>resize</code></a>.
-  </div>
-  <div class="card">
-    Create a <a href="https://observablehq.com/framework/project-structure">new page</a> by adding a Markdown file (<code>whatever.md</code>) to the <code>src</code> folder.
-  </div>
-  <div class="card">
-    Add a drop-down menu using <a href="https://observablehq.com/framework/inputs/select"><code>Inputs.select</code></a> and use it to filter the data shown in a chart.
-  </div>
-  <div class="card">
-    Write a <a href="https://observablehq.com/framework/loaders">data loader</a> that queries a local database or API, generating a data snapshot on build.
-  </div>
-  <div class="card">
-    Import a <a href="https://observablehq.com/framework/imports">recommended library</a> from npm, such as <a href="https://observablehq.com/framework/lib/leaflet">Leaflet</a>, <a href="https://observablehq.com/framework/lib/dot">GraphViz</a>, <a href="https://observablehq.com/framework/lib/tex">TeX</a>, or <a href="https://observablehq.com/framework/lib/duckdb">DuckDB</a>.
-  </div>
-  <div class="card">
-    Ask for help, or share your work or ideas, on our <a href="https://github.com/observablehq/framework/discussions">GitHub discussions</a>.
-  </div>
-  <div class="card">
-    Visit <a href="https://github.com/observablehq/framework">Framework on GitHub</a> and give us a star. Or file an issue if you’ve found a bug!
-  </div>
-</div>
 
 <style>
-
-.hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
-  text-wrap: balance;
-  text-align: center;
-}
-
-.hero h1 {
-  margin: 1rem 0;
-  padding: 1rem 0;
-  max-width: none;
-  font-size: 14vw;
-  font-weight: 900;
-  line-height: 1;
-  background: linear-gradient(30deg, var(--theme-foreground-focus), currentColor);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.hero h2 {
-  margin: 0;
-  max-width: 34em;
-  font-size: 20px;
-  font-style: initial;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--theme-foreground-muted);
-}
-
-@media (min-width: 640px) {
+  @import url("/_theme/assets/css/base.css");
+  @import url("/_theme/assets/css/cards.css");
+  
+  /* Hero section */
+  .hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--color-teal-dark) 0%, var(--color-teal) 100%);
+    color: white;
+    margin: -2rem -2rem 3rem -2rem;
+  }
+  
   .hero h1 {
-    font-size: 90px;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: white;
+  }
+  
+  .hero p {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.95;
+  }
+  
+  /* Focus areas */
+  .focus-areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+  
+  .focus-card {
+    background: var(--color-surface);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  
+  .focus-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .focus-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Content sections */
+  .content-section {
+    margin: 4rem 0;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .section-header h2 {
+    margin: 0;
+  }
+  
+  .view-all {
+    color: var(--color-teal);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .view-all:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="hero">
+  <h1>Climate Policy Platform</h1>
+  <p>Access cutting-edge research, real-time data dashboards, and policy insights on climate action and sustainable development.</p>
+</div>
+
+```js
+// Load all content with error handling
+let reports = [];
+let dashboards = [];
+let articles = [];
+
+try {
+  reports = await FileAttachment("/data/all-reports.json").json();
+  if (!Array.isArray(reports)) {
+    console.error('Invalid reports data - expected array');
+    reports = [];
+  }
+} catch (error) {
+  console.error('Failed to load reports:', error);
+}
+
+try {
+  dashboards = await FileAttachment("/data/dashboards-list.json").json();
+  if (!Array.isArray(dashboards)) {
+    console.error('Invalid dashboards data - expected array');
+    dashboards = [];
+  }
+} catch (error) {
+  console.error('Failed to load dashboards:', error);
+}
+
+try {
+  articles = await FileAttachment("/data/news-articles.json").json();
+  if (!Array.isArray(articles)) {
+    console.error('Invalid articles data - expected array');
+    articles = [];
+  }
+} catch (error) {
+  console.error('Failed to load articles:', error);
+}
+
+// Get latest content with fallback
+const latestReports = reports.slice(0, 3);
+const latestDashboards = dashboards.slice(0, 2);
+const latestArticles = articles.slice(0, 3);
+
+// Pre-load illustration URLs
+for (const report of latestReports) {
+  if (report.illustration) {
+    report.illustrationUrl = await FileAttachment(report.illustration).url();
   }
 }
 
-</style>
+for (const dashboard of latestDashboards) {
+  if (dashboard.illustration) {
+    dashboard.illustrationUrl = await FileAttachment(dashboard.illustration).url();
+  }
+}
+
+for (const article of latestArticles) {
+  if (article.illustration) {
+    article.illustrationUrl = await FileAttachment(article.illustration).url();
+  }
+}
+```
+
+## Our Focus Areas
+
+<div class="focus-areas">
+  <div class="focus-card">
+    <div class="focus-icon">💰</div>
+    <h3>Climate Finance</h3>
+    <p>Tracking global flows and identifying gaps in climate funding</p>
+  </div>
+  <div class="focus-card">
+    <div class="focus-icon">🌊</div>
+    <h3>Ocean Conservation</h3>
+    <p>Monitoring health indicators across the Pacific region</p>
+  </div>
+  <div class="focus-card">
+    <div class="focus-icon">📊</div>
+    <h3>Policy Analysis</h3>
+    <p>Evidence-based recommendations for climate action</p>
+  </div>
+  <div class="focus-card">
+    <div class="focus-icon">📈</div>
+    <h3>Data Visualization</h3>
+    <p>Interactive tools for exploring complex datasets</p>
+  </div>
+</div>
+
+```js
+// Display latest reports
+display(html`
+  <div class="content-section">
+    <div class="section-header">
+      <h2>Latest Reports</h2>
+      <a href="/reports/" class="view-all">View all reports →</a>
+    </div>
+    <div class="news-grid">
+      ${latestReports.map(report => html`
+        <a href="${report.url}" class="news-card news-card--report">
+          <div class="news-card__header">
+            ${report.illustration ? html`
+              <div class="news-card__illustration">
+                <img src="${report.illustrationUrl}" alt="">
+              </div>
+            ` : ''}
+            ${(report.hasDoi || report.hasPdf) ? html`
+              <div class="news-card__badges">
+                ${report.hasDoi ? html`<span class="badge badge--doi">DOI</span>` : ''}
+                ${report.hasPdf ? html`<span class="badge badge--pdf">PDF</span>` : ''}
+              </div>
+            ` : ''}
+          </div>
+          <div class="news-card__body">
+            <span class="news-card__type">Report</span>
+            <h3 class="news-card__title">${report.title}</h3>
+            <p class="news-card__excerpt">${report.excerpt}</p>
+            <div class="news-card__meta">
+              <span class="news-card__date">${report.dateFormatted}</span>
+              ${report.read_time ? html`
+                <span class="news-card__read-time">${report.read_time}</span>
+              ` : ''}
+            </div>
+          </div>
+        </a>
+      `)}
+    </div>
+  </div>
+`);
+```
+
+<div class="content-section">
+  <div class="section-header">
+    <h2>Interactive Dashboards</h2>
+    <a href="/dashboards/" class="view-all">View all dashboards →</a>
+  </div>
+  <div class="news-grid">
+    ${latestDashboards.map(dashboard => html`
+      <a href="${dashboard.url}" class="news-card news-card--dashboard">
+        <div class="news-card__header">
+          ${dashboard.illustration ? html`
+            <div class="news-card__illustration">
+              <img src="${dashboard.illustrationUrl}" alt="">
+            </div>
+          ` : ''}
+        </div>
+        <div class="news-card__body">
+          <span class="news-card__type">Dashboard</span>
+          <h3 class="news-card__title">${dashboard.title}</h3>
+          <p class="news-card__excerpt">${dashboard.excerpt}</p>
+          <div class="news-card__meta">
+            <span class="news-card__date">Updated ${dashboard.dateFormatted}</span>
+          </div>
+        </div>
+      </a>
+    `)}
+  </div>
+</div>
+
+<div class="content-section">
+  <div class="section-header">
+    <h2>Latest News & Insights</h2>
+    <a href="/news/" class="view-all">View all news →</a>
+  </div>
+  <div class="news-grid">
+    ${latestArticles.map(article => html`
+      <a href="${article.url}" class="news-card news-card--${article.type}">
+        <div class="news-card__header">
+          ${article.illustration ? html`
+            <div class="news-card__illustration">
+              <img src="${article.illustrationUrl}" alt="">
+            </div>
+          ` : ''}
+        </div>
+        <div class="news-card__body">
+          <span class="news-card__type">${article.type}</span>
+          <h3 class="news-card__title">${article.title}</h3>
+          <p class="news-card__excerpt">${article.excerpt}</p>
+          <div class="news-card__meta">
+            <span class="news-card__date">${article.dateFormatted}</span>
+            ${article.read_time ? html`
+              <span class="news-card__read-time">${article.read_time}</span>
+            ` : ''}
+          </div>
+        </div>
+      </a>
+    `)}
+  </div>
+</div>
